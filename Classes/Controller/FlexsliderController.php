@@ -13,7 +13,7 @@ namespace WapplerSystems\WsFlexslider\Controller;
  *
  * The TYPO3 project - inspiring people to share!
  */
-
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Messaging\AbstractMessage;
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
 use WapplerSystems\WsFlexslider\Domain\Model\Content;
@@ -27,24 +27,46 @@ class FlexsliderController extends ActionController
 {
     /**
      * @var \WapplerSystems\WsFlexslider\Domain\Repository\ImageRepository
-     * @TYPO3\CMS\Extbase\Annotation\Inject
+   
      */
-    protected $imageRepository;
+    public $imageRepository;
     
+
     /**
      * @var \WapplerSystems\WsFlexslider\Domain\Repository\ContentRepository
-     * @TYPO3\CMS\Extbase\Annotation\Inject
+     
      */
-    protected $contentRepository;
+    public $contentRepository;
     
     /**
      * initializes all Controller actions
      *
      * @return void
      */
-    public function initializeAction()
+    
+    /**
+     * @param \WapplerSystems\WsFlexslider\Domain\Repository\ContentRepository $contentRepository
+     */
+    public function injectContentRepository(\WapplerSystems\WsFlexslider\Domain\Repository\ContentRepository $contentRepository): void
     {
-        $this->configuration = $this->settings['flexslider'];
+        $this->contentRepository = $contentRepository;
+    }
+    
+    /**
+     * @param \WapplerSystems\WsFlexslider\Domain\Repository\ImageRepository $imageRepository
+     */
+    public function injectImageRepository(\WapplerSystems\WsFlexslider\Domain\Repository\ImageRepository $imageRepository)
+    {
+        $this->imageRepository = $imageRepository;
+        
+    }
+    
+
+    public function initializeAction()
+    
+    {
+      
+        $this->configuration = $this->settings['flexslider'] ?? null;;
         
         // Settings
 
@@ -161,7 +183,7 @@ class FlexsliderController extends ActionController
      */
     public function listAction()
     {
-        $feConfigManager = $this->objectManager->get(FrontendConfigurationManager::class);
+        $feConfigManager = GeneralUtility::makeInstance(FrontendConfigurationManager::class);
         $ts = $feConfigManager->getTypoScriptSetup();
 
         // Check Static include
@@ -175,6 +197,8 @@ class FlexsliderController extends ActionController
         $this->view->assign('uid', $contentObject->getUid());
         $this->view->assign('settings', $this->settings);
         $this->view->assign('images', $this->imageRepository->findByContentUid($contentObject->getUid()));
+    
+        return $this->htmlResponse();
     }
     
     /**
@@ -184,10 +208,10 @@ class FlexsliderController extends ActionController
      */
     protected function getTranslatedContentObject()
     {
+     
         $contentObjectRecord = $this->configurationManager->getContentObject()->data;
-        
-        /** @var Content $contentObject */
-        $contentObject = $this->contentRepository->findByIdentifier($contentObjectRecord['uid']);
+
+        $contentObject = $this->contentRepository->findByUid($contentObjectRecord['uid']);
         return $contentObject;
     }
 
