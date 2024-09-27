@@ -20,7 +20,7 @@
 		"source": "https://github.com/svewap/ws_flexslider"
 	},
 	"require": {
-		"typo3/cms-core": "^9.5 || ^10.4"
+		"typo3/cms-core": "^12.4 || ^12.9"
 	},
 	"autoload": {
 		"psr-4": {
