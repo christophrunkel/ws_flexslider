@@ -1,7 +1,5 @@
 <?php
-if (!defined('TYPO3_MODE')) {
-    die ('Access denied.');
-}
+defined('TYPO3') || die();
 
 return [
     'ctrl' => [
@@ -197,17 +195,7 @@ return [
             'label' => 'LLL:EXT:ws_flexslider/Resources/Private/Language/locallang_db.xlf:tx_wsflexslider_domain_model_image.link',
             'config' => [
                 'type' => 'input',
-                'wizards' => [
-                    'link' => [
-                        'type' => 'popup',
-                        'title' => 'LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:header_link_formlabel',
-                        'icon' => 'actions-wizard-link',
-                        'module' => [
-                            'name' => 'wizard_link',
-                        ],
-                        'JSopenParams' => 'height=600,width=500,status=0,menubar=0,scrollbars=1'
-                    ],
-                ],
+                'renderType'=>'inputLink',
                 'softref' => 'typolink,typolink_tag,images,url',
             ],
         ],
@@ -215,52 +203,12 @@ return [
             'exclude' => 0,
             'l10n_mode' => 'mergeIfNotBlank',
             'label' => 'LLL:EXT:ws_flexslider/Resources/Private/Language/locallang_db.xlf:tx_wsflexslider_domain_model_image.image',
-            'config' => \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::getFileFieldTCAConfig(
-                'fal_image',
-                [
-                    'minitems' => 0,
-                    'maxitems' => 1,
-                    'appearance' => [
-                        'createNewRelationLinkTitle' => 'LLL:EXT:ws_flexslider/Resources/Private/Language/locallang_db.xlf:add_image',
-                        'showAllLocalizationLink' => true,
-                        'headerThumbnail' => [
-                            'height' => '90c',
-                            'width' => 90
-                        ]
-                    ],
-                    'foreign_match_fields' => [
-                        'fieldname' => 'fal_image',
-                        'tablenames' => 'tx_wsflexslider_domain_model_image',
-                        'table_local' => 'sys_file',
-                    ],
-                    'foreign_types' => [
-                        '0' => [
-                            'showitem' => '
-                                --palette--;LLL:EXT:lang/Resources/Private/Language/locallang_tca.xlf:sys_file_reference.imageoverlayPalette,
-                                --palette--;;imageoverlayPalette,
-                                --palette--;;filePalette'
-                        ],
-                        \TYPO3\CMS\Core\Resource\File::FILETYPE_IMAGE => [
-                            'showitem' => '
-                                --palette--;LLL:EXT:lang/Resources/Private/Language/locallang_tca.xlf:sys_file_reference.imageoverlayPalette,
-                                --palette--;;imageoverlayPalette,
-                                --palette--;;filePalette'
-                        ],
-                    ],
-                    'overrideChildTca' => [
-                        'types' => [
-                            \TYPO3\CMS\Core\Resource\File::FILETYPE_IMAGE => [
-                                'showitem' => '
-                                    crop,
-                                    --palette--;;filePalette'
-                            ],
-                        ],
-                    ],
-                ],
-                'gif,jpg,jpeg,png,svg'
-            )
-
-        ],
+            'config' => array(
+                'type' => 'file',
+                'maxitems' => 1,
+                'allowed' => 'common-image-types'
+            ),
+            ],
         'content_uid' => [
             'label' => 'CC',
             'config' => [
