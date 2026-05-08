@@ -47,10 +47,7 @@ call_user_func(
             'Flexslider');
         
         
-        \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::allowTableOnStandardPages('tx_wsflexslider_domain_model_image');
-        \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addLLrefForTCAdescr(
-            'tx_wsflexslider_domain_model_image',
-            'EXT:ws_flexslider/Resources/Private/Language/locallang_csh_image.xlf');
+ 
         
         
         $GLOBALS['TCA']['tt_content']['types']['list']['subtypes_excludelist'][$pluginSignature] = 'layout,select_key,pages,recursive';
